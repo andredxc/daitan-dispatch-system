@@ -26,8 +26,9 @@ func main() {
 	error := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	app := &application{
-		info:  info,
-		error: error,
+		info:    info,
+		error:   error,
+		service: new(Service),
 	}
 
 	serverURI := fmt.Sprintf("%s:%d", *host, *port)
