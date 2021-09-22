@@ -1,6 +1,8 @@
 package main
 
 import (
+	"daitan-dispatch-system/cmd/app/models"
+	"daitan-dispatch-system/cmd/app/services"
 	"encoding/json"
 	"net/http"
 
@@ -9,9 +11,10 @@ import (
 
 func (app *application) requestTrip(w http.ResponseWriter, r *http.Request) {
 
-	var u TripRequest
+	var u *models.TripRequest
 	err := json.NewDecoder(r.Body).Decode(&u)
-	trip, err := u.RequestTrip()
+
+	trip, err := services.GetInstance().RequestTrip(u)
 	if err != nil {
 		app.serverError(w, err)
 	}
@@ -30,10 +33,10 @@ func (app *application) requestTrip(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) findTrip(w http.ResponseWriter, r *http.Request) {
 
-	var u Trip
+	var u models.Trip
 	vars := mux.Vars(r)
 	uuid := vars["uuid"]
-	trip, err := u.FindTrip(uuid)
+	trip, err := services.GetInstance().FindTrip(uuid)
 	if err != nil {
 		app.serverError(w, err)
 	}

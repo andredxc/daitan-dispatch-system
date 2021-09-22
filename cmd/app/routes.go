@@ -4,9 +4,9 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (app *application) routes() *mux.Router {
+func (app *application) Routes() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/api/trips/", app.findTrip).Methods("GET")
-	r.HandleFunc("/api/trips/{uuid}", app.requestTrip).Methods("POST")
+	r.HandleFunc("/api/trips/", app.requestTrip).Methods("POST")
+	r.HandleFunc("/api/trips/{uuid}", app.findTrip).Methods("GET")
 	return r
 }

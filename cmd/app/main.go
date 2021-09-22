@@ -10,15 +10,14 @@ import (
 )
 
 type application struct {
-	error   *log.Logger
-	info    *log.Logger
-	service *service
+	error *log.Logger
+	info  *log.Logger
 }
 
 func main() {
 
-	host := flag.String("--host", "localhost", "HTTP server network address")
-	port := flag.Int("--port", 8080, "HTTP server network port")
+	host := flag.String("host", "localhost", "HTTP server network address")
+	port := flag.Int("port", 8080, "HTTP server network port")
 
 	flag.Parse()
 
@@ -26,16 +25,15 @@ func main() {
 	error := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	app := &application{
-		info:    info,
-		error:   error,
-		service: GetInstance(),
+		info:  info,
+		error: error,
 	}
 
 	serverURI := fmt.Sprintf("%s:%d", *host, *port)
 	srv := &http.Server{
 		Addr:         serverURI,
 		ErrorLog:     error,
-		Handler:      app.routes(),
+		Handler:      app.Routes(),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,

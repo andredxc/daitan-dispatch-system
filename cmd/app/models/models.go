@@ -1,4 +1,4 @@
-package main
+package models
 
 type Status int
 
@@ -21,6 +21,7 @@ type Car struct {
 }
 
 type Driver struct {
+	Uuid    string  `json:"uuid"`
 	Name    string  `json:"name"`
 	Ranking float64 `json:"ranking"`
 	Trips   int     `json:"trips"`
