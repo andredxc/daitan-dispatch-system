@@ -12,7 +12,7 @@ import (
 type application struct {
 	error   *log.Logger
 	info    *log.Logger
-	service *Service
+	service *service
 }
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 	app := &application{
 		info:    info,
 		error:   error,
-		service: new(Service),
+		service: GetInstance(),
 	}
 
 	serverURI := fmt.Sprintf("%s:%d", *host, *port)

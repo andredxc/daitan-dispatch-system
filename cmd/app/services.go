@@ -2,9 +2,21 @@ package main
 
 import (
 	"github.com/google/uuid"
+	"sync"
 )
 
-type Service struct {
+type service struct {
+}
+
+var instance *service
+var once sync.Once
+
+func GetInstance() *service {
+	once.Do(func() {
+		instance = &service{}
+	})
+
+	return instance
 }
 
 func (t *TripRequest) RequestTrip() (Trip, error) {
