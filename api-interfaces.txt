@@ -1,0 +1,63 @@
+Location
+{
+   "latitude":0.357107,
+   "longitude":6.716779
+}
+
+TripRequest
+{
+   "datetime":"2006-01-02T15:04:05Z-3:00",
+   "location":{
+      "latitude":0.357107,
+      "longitude":6.716779
+   }
+}
+
+Car
+{
+   "plateNumber":"GJX-2343",
+   "brand":"lamborghini",
+   "model":"aventador-svj"
+}
+
+Driver
+{
+   "uuid":"420b25ca-7c88-4b68-96f1-f47933f3f708",
+   "name":"Agatha Ayla",
+   "ranking":4.9,
+   "trips":656,
+   "location":{
+      "latitude":0.357107,
+      "longitude":6.716779
+   },
+   "status":2
+}
+
+Trip
+{
+   "uuid":"e8aff513-ed78-40aa-94e5-b54079712c4d",
+   "driver":{
+       "uuid":"e8aff513-ed78-40aa-94e5-b54079712c4d",
+      "name":"Agatha Ayla",
+      "ranking":4.9,
+      "trips":656,
+      "car":{
+         "plateNumber":"GJX-2343",
+         "brand":"lamborghini",
+         "model":"aventador-svj"
+      }
+   },
+   "location":{
+      "latitude":0.357107,
+      "longitude":6.716779
+   },
+   "status":2
+}
+
+POST "api/v1/trips"
+GET "api/v1/trips/{uuid}"
+
+POST "api/v1/drivers"
+GET "api/v1/drivers/{uuid}"
+UPDATE "api/v1/drivers/{uuid}"
+PATCH "api/v1/drivers/{uuid}" ?
