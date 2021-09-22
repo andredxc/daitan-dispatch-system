@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 type Status int
 
 const (
@@ -12,6 +14,10 @@ const (
 type Location struct {
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
+}
+
+func (l Location) String() string {
+	return fmt.Sprintf("Latitude=%.3f, Longitude=%.3f", l.Latitude, l.Longitude)
 }
 
 type Car struct {
@@ -35,9 +41,17 @@ type TripRequest struct {
 	Status   Status
 }
 
+func (tr TripRequest) String() string {
+	return fmt.Sprintf("Location=%s, id=%s, Status=%d", tr.Location, tr.Uuid, tr.Status)
+}
+
 type Trip struct {
 	Location Location
 	Uuid     string `json:"uuid"`
 	Status   Status
 	Driver   Driver
+}
+
+func (t Trip) String() string {
+	return fmt.Sprintf("Location=%s; id=%s; Status=%d; Driver=%s\n", t.Location, t.Uuid, t.Status, t.Driver.Name)
 }

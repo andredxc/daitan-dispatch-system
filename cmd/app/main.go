@@ -1,6 +1,7 @@
 package main
 
 import (
+	"daitan-dispatch-system/cmd/app/services"
 	"flag"
 	"fmt"
 	"log"
@@ -41,5 +42,6 @@ func main() {
 
 	info.Printf("Starting server on %s", serverURI)
 	err := srv.ListenAndServe()
+	services.GetInstance().Shutdown()
 	error.Fatal(err)
 }

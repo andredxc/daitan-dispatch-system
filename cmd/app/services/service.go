@@ -1,18 +1,22 @@
 package services
 
 import (
+	"fmt"
+	"log"
 	"math"
 	"sync"
 
-	"daitan-dispatch-system/cmd/app/models"
-
 	"github.com/google/uuid"
+
+	"daitan-dispatch-system/cmd/app/models"
 )
 
 type Service struct {
 	models.TripRequest
 	models.Trip
 	models.Location
+
+	tripRequestCh chan *models.TripRequest
 }
 
 var instance *Service
@@ -21,15 +25,24 @@ var once sync.Once
 func GetInstance() *Service {
 	once.Do(func() {
 		instance = &Service{}
+		instance.startTripFinder()
 	})
 
 	return instance
 }
 
+func (t *Service) NewTripRequest(request *models.TripRequest) error {
+
+	t.tripRequestCh <- request
+	fmt.Printf("[NewTripRequest] Trip request added to channel, %s\n", *request)
+	return nil
+}
+
 func (t *Service) RequestTrip(request *models.TripRequest) (models.Trip, error) {
+
 	userLocation := request.Location
 	_uuid := uuid.New().String()
-	driver, _ := t.FindDriver(&userLocation)
+	driver, _ := t.FindMockDriver(&userLocation)
 	location := models.Location{
 		Latitude:  -15.838399,
 		Longitude: -48.010947,
@@ -70,7 +83,7 @@ func (trip *Service) FindTrip(uuid string) (models.Trip, error) {
 	}, nil
 }
 
-func (t *Service) FindDriver(location *models.Location) (models.Driver, error) {
+func (t *Service) FindMockDriver(location *models.Location) (models.Driver, error) {
 
 	if location == nil {
 
@@ -110,4 +123,30 @@ func add(from, to models.Location) float64 {
 	dist = dist * 1.609344 * 1000
 
 	return dist
+}
+
+func (t *Service) startTripFinder() {
+
+	log.Println("[startTripFinder] Started")
+	t.tripRequestCh = make(chan *models.TripRequest, 4)
+	go func() {
+		for req := range t.tripRequestCh {
+			newTrip, err := t.RequestTrip(req)
+			if err != nil {
+				fmt.Printf("[go startTripFinder] Error requesting trip for req=%s\n", *req)
+				// TODO: Notify someone
+				// TODO: Retry mechanism
+				continue
+			}
+
+			fmt.Printf("[go startTripFinder] Found trip=%s for request=%s\n", newTrip, *req)
+			// TODO: Do something with the trip (?)
+		}
+		fmt.Println("[startTripFinder] goroutine end")
+	}()
+}
+
+func (t *Service) Shutdown() {
+	close(t.tripRequestCh)
+	fmt.Println("Service shutdown, trip request channel closed")
 }
