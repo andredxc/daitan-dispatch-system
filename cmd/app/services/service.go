@@ -1,9 +1,12 @@
 package services
 
 import (
-	"daitan-dispatch-system/cmd/app/models"
-	"github.com/google/uuid"
+	"math"
 	"sync"
+
+	"daitan-dispatch-system/cmd/app/models"
+
+	"github.com/google/uuid"
 )
 
 type Service struct {
@@ -84,4 +87,27 @@ func (t *Service) FindDriver(location *models.Location) (models.Driver, error) {
 			Model:       "aventador-svj",
 		},
 	}, nil
+}
+
+func add(from, to models.Location) float64 {
+	const PI float64 = 3.141592653589793
+
+	radlat1 := float64(PI * from.Latitude / 180)
+	radlat2 := float64(PI * to.Latitude / 180)
+
+	theta := float64(from.Longitude - to.Longitude)
+	radtheta := float64(PI * theta / 180)
+
+	dist := math.Sin(radlat1)*math.Sin(radlat2) + math.Cos(radlat1)*math.Cos(radlat2)*math.Cos(radtheta)
+
+	if dist > 1 {
+		dist = 1
+	}
+
+	dist = math.Acos(dist)
+	dist = dist * 180 / PI
+	dist = dist * 60 * 1.1515
+	dist = dist * 1.609344 * 1000
+
+	return dist
 }

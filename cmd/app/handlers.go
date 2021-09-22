@@ -1,10 +1,11 @@
 package main
 
 import (
-	"daitan-dispatch-system/cmd/app/models"
-	"daitan-dispatch-system/cmd/app/services"
 	"encoding/json"
 	"net/http"
+
+	"daitan-dispatch-system/cmd/app/models"
+	"daitan-dispatch-system/cmd/app/services"
 
 	"github.com/gorilla/mux"
 )
